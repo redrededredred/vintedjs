@@ -19,31 +19,23 @@ async function getVintedItems(query) {
   var cookie = await getValidCookie()
   var current_page = 1
   var url = `https://www.vinted.de/api/v2/catalog/items?page=${current_page.toString}&per_page=500&search_text=${query}`
+  var data = new Array
+  //this part looks stupid but it should work 
 
-  // TODO: add do while loop? this part looks stupid
-  var response = await fetch(url, {method: "GET", 
+
+  do {
+    var response = await fetch(`https://www.vinted.de/api/v2/catalog/items?page=${current_page.toString}&per_page=500&search_text=${query}`, {method: "GET", 
   headers: {
     "Cookie": cookie
   }})
 
   var jsonData = await response.json();
   console.log(jsonData);
-
-  current_page = current_page + 1
-
-  while (jsonData["pagination"]["current_page"] != jsonData["pagination"]["total_pages"]) {
-    var response = await fetch(url, {method: "GET", 
-  headers: {
-    "Cookie": cookie
-  }})
-
-  var jsonData = await response.json();
-
-  console.log(jsonData);
+  data.join(jsonData)
   current_page = current_page + 1
   console.log(current_page)
-
-  };
+  } while (current_page != jsonData["pagination"]["total_pages"])
+  
+ return data
 }
 
-getVintedItems("awd")
