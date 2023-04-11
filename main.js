@@ -31,11 +31,13 @@ async function getVintedItems(query) {
 
   var jsonData = await response.json();
   console.log(jsonData);
-  data.join(jsonData)
+  // TODO 
+  data.push(jsonData["items"])
   current_page = current_page + 1
   console.log(current_page)
   } while (current_page != jsonData["pagination"]["total_pages"])
-  
+    
  return data
 }
 
+getVintedItems("3ds").then(console.log)
